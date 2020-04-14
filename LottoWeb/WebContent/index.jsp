@@ -1,3 +1,7 @@
+<%@page import="lotto.makeNumber.makeNumberVO"%>
+<%@page import="java.util.Date"%>
+<%@page import="java.util.Locale"%>
+<%@page import="java.text.SimpleDateFormat"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
@@ -9,7 +13,19 @@
 <%
 	
 	ArrayList<countVO> list = jdbcConnection.lotto_Select();
-
+	SimpleDateFormat SDate = new SimpleDateFormat("yyyy.mm.dd hh:mm:ss", Locale.KOREA);
+	Date current = new Date();
+	String CurDate = SDate.format(current);
+	CurDate = CurDate.substring(0,4);
+	
+	ArrayList<makeNumberVO> make_list = jdbcConnection.lotto_Select_makeNumber();
+	
+	int nowPageNo = Integer.parseInt(request.getParameter("pageNo"));
+	if (nowPageNo < 1) {
+		nowPageNo = 1;
+	} else if (nowPageNo > (make_list.get(0).getGetRow() / 10) + 1) {
+		nowPageNo = (make_list.get(0).getGetRow() / 10) + 1;
+	}
 %>
 <html>
 <head>
@@ -46,7 +62,7 @@
 			<ul class="main-menu visible-on-click" id="main-menu">
 				<li><a href="./index.jsp?"style="color: black; background-color: white; font-weight:800;">HOME</a></li>
 				<li><a href="./makeNumber.jsp" style="color: white;">로또번호 생성기</a></li>
-				<li><a href="./analysis.jsp" style="color: white;">로또 분석</a></li>
+				<li><a href="./analysis.jsp?CurDate=<%=CurDate%>" style="color: white;">로또 분석</a></li>
 				<li><a href="./location.jsp?pageNo=1" style="color: white;">로또 1등 판매점</a></li>
 				<li><a href="#" style="color: white;">money</a></li>
 			</ul><!-- main-menu -->
@@ -64,7 +80,7 @@
 				
 				<div class="col-lg-10 col-md-4">
 					
-					<div class="col-md-5"></div>
+					<div class="col-md-5"></div>.
 				
 				
 					<div class="blog-posts">
@@ -76,31 +92,63 @@
 
 						<hr>
 						<div class="row">
+									<%
+					for (int i = (nowPageNo - 1) * 10; i <= (nowPageNo * 10) - 1; i++) {
+						if (i < make_list.size()) {
+							System.out.println("make_list.size(): " + make_list.size());
+							System.out.println("i: " + i);
+							System.out.println("nowPageNo: " + nowPageNo);
+				%>
 						
 							<div class="col-lg-6 col-md-12">
 								<div class="card text-center mt-2 mb-2">
 									<div class="card-body mx-auto clearfix px-0 py-2">
-										<div class="d-inline-block small mr-1">
+									<div class="d-inline-block small mr-1">
 											<strong>878회</strong>
 										</div>
-										<div class="d-inline-block numberCircle border-warning bg-warning text-light"><strong>5</strong></div>
-										<div class="d-inline-block numberCircle border-warning bg-warning text-light"><strong>7</strong></div>
-										<div class="d-inline-block numberCircle border-primary bg-primary text-light"><strong>9</strong></div>
-										<div class="d-inline-block numberCircle border-danger bg-danger text-light"><strong>12</strong></div>
-										<div class="d-inline-block numberCircle border-secondary bg-secondary text-light"><strong>15</strong></div>
-										<div class="d-inline-block numberCircle border-primary bg-primary text-light"><strong>23</strong></div>
+									<%
+									for(int j=1;j<=6;j++){
+										Object st2 = "make_list.get(i).getNum"+ j + "()";
+										String st = "make_list.get(i).getNum"+ j + "()";
+										int num = make_list.get(i).getNum1();
+										//int num = st;
+									%>
+										
+			  	<% 
+			  			if(num <=10){
+			  	%>
+							<div class="d-inline-block numberCircle border-warning bg-warning text-light"><strong><%=num%></strong></div>
+				<%
+						}else if(num >10 && num <= 20){
+				%>
+							<div class="d-inline-block numberCircle border-primary bg-primary text-light"><strong><%=num%></strong></div>
+				<%		
+						}else if(num > 20 && num <= 30){
+				%>
+							<div class="d-inline-block numberCircle border-primary bg-primary text-light"><strong><%=num%></strong></div>										
+				<%		
+						}else if(num > 30 && num <= 40){
+				%>
+							<div class="d-inline-block numberCircle border-primary bg-primary text-light"><strong><%=num%></strong></div>				
+				<%
+						}else{
+				%>
+							<div class="d-inline-block numberCircle border-primary bg-primary text-light"><strong><%=num%></strong></div>				
+				<%
+					}}
+			  	%>			
 										<div class="col-md-12" style="font-size: 1.1em">
 											<div class="small text-muted mt-1" >
 												guest: 
 												<div class="glyphicon glyphicon-time"></div>
-											 	2020.02.11 15:01:17
+											 	<%=make_list.get(i).getDate()%>
 											</div>
 											
 										</div>												
 									</div>
 								</div>
 							</div>
-							
+				<%}} %>	
 							<div class="col-lg-6 col-md-12">
 								<div class="card text-center mt-2 mb-2">
 									<div class="card-body mx-auto clearfix px-0 py-2">

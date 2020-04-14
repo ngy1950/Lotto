@@ -1,11 +1,8 @@
 package lotto.util;
-import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.Date;
 import java.text.SimpleDateFormat;
-import java.sql.Date;
-
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
+import java.util.Locale;
 
 public class Main {
 	public static void main(String[] args) {
@@ -13,7 +10,11 @@ public class Main {
 		int [] arr = new int[45];
 		URL result;
 		
-		
+		SimpleDateFormat SDate = new SimpleDateFormat("yyyy.mm.dd hh:mm:ss", Locale.KOREA);
+		Date current = new Date();
+		String CurDate = SDate.format(current);
+		System.out.println(CurDate.substring(0,4));
+/*
 		// 당첨정보 최초 insert
 		String turn = "0";
 		while(true) {
@@ -52,7 +53,7 @@ public class Main {
 				break;	
 			}
 		}
-		
+*/	
 		
 		
 		

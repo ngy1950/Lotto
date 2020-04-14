@@ -6,9 +6,14 @@
 <jsp:useBean id="jdbcConnection" class="lotto.util.JdbcConnection" scope="page" />
 <jsp:useBean id="countVO" class="lotto.count.countVO" />
 <%
-	
 	ArrayList<countVO> list = jdbcConnection.lotto_Select();
-
+	int CurDate = Integer.parseInt(request.getParameter("CurDate"));
+	if(CurDate >= 2020){
+		CurDate = 2020;
+	}else if(CurDate <=2002){
+		CurDate = 2002;
+	}
+	
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -72,7 +77,7 @@
 			<ul class="main-menu visible-on-click" id="main-menu">
 				<li><a href="./index.jsp"style="color: white;">HOME</a></li>
 				<li><a href="./makeNumber.jsp" style="color: white;">로또번호 생성기</a></li>
-				<li><a href="./analysis.jsp" style="color: black; background-color: white; font-weight:800;">로또 분석</a></li>
+				<li><a href="./analysis.jsp?CurDate=<%=CurDate%>" style="color: black; background-color: white; font-weight:800;">로또 분석</a></li>
 				<li><a href="#" style="color: white;">로또 1등 판매점</a></li>
 				<li><a href="#" style="color: white;">CONTACT</a></li>
 			</ul><!-- main-menu -->
@@ -98,12 +103,12 @@
 						<h4 class="h1-sub mt-3"><strong>연도별</strong>
 						<hr>
 							<center>
-								<a class="btn caegory-btn" href="#">
+								<a class="btn caegory-btn" href="analysis.jsp?CurDate=<%=CurDate - 1%>">
 									<div class="glyphicon glyphicon-chevron-left"></div>
 								</a>&nbsp;
-								<a href="#"><div class="glyphicon glyphicon-calendar" ></div></a><span style="font-size: 1.2em; color: red;">2020년</span>&nbsp;
+								<a href="#"><div class="glyphicon glyphicon-calendar" ></div></a><span style="font-size: 1.2em; color: red;"><%=CurDate%>년</span>&nbsp;
 								
-								<a class="btn caegory-btn" href="#">
+								<a class="btn caegory-btn" href="analysis.jsp?CurDate=<%=CurDate + 1%>">
 									<div class="glyphicon glyphicon-chevron-right"></div>
 								</a>
 							</center>

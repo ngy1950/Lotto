@@ -9,7 +9,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import lotto.count.countVO;
+import lotto.makeNumber.makeNumberVO;
 import lotto.sale.SaleVO;
+import lotto.winInfo.WinInfoVO;
 
 public class JdbcConnection {
 	private Connection conn;
@@ -118,7 +120,7 @@ public class JdbcConnection {
 		
 		
 		String SELECT_WIN = "select * from lotto_count_test order by lotto_win desc";
-		
+		System.out.println("lotto_Select======>");
 		try {
 			join();
 			pstmt = conn.prepareStatement(SELECT_WIN);
@@ -135,6 +137,74 @@ public class JdbcConnection {
 			e.printStackTrace();
 			
 		}
+		System.out.println("!!!" + list);
+		return list;
+	}
+	
+	public ArrayList<makeNumberVO> lotto_Select_makeNumber(){
+		makeNumberVO vo;
+		ArrayList<makeNumberVO> list = new ArrayList();
+		String SELECT = "select count(*) from makenumber_test";
+		String SELECT_MAKENUMBER = "select * from makenumber_test order by 8 desc";
+		System.out.println("");
+		try {
+			join();
+			pstmt = conn.prepareStatement(SELECT);
+			rs = pstmt.executeQuery();
+			rs.last();
+			int row = rs.getRow();
+			
+			pstmt = conn.prepareStatement(SELECT_MAKENUMBER);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				vo = new makeNumberVO();
+				vo.setCode(rs.getInt("code"));
+				vo.setNum1(rs.getInt("num1"));
+				vo.setNum2(rs.getInt("num2"));
+				vo.setNum3(rs.getInt("num3"));
+				vo.setNum4(rs.getInt("num4"));
+				vo.setNum5(rs.getInt("num5"));
+				vo.setNum6(rs.getInt("num6"));
+				vo.setDate(rs.getTimestamp("date"));
+				
+				System.out.println("num1" + vo.getNum1());
+				System.out.println("num2" + vo.getNum2());
+				System.out.println("date" + vo.getDate());
+				if(list.size() < 1) {
+					vo.setGetRow(row);
+				}
+				
+				list.add(vo);
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+	
+	public ArrayList<WinInfoVO> lotto_Select_Year(String curDate){
+		WinInfoVO vo;
+		ArrayList<WinInfoVO> list = new ArrayList();
+		String SELECT_WININFO = "select * from win_info_test where drDate like '?%'";
+		try {
+			join();
+			pstmt = conn.prepareStatement(SELECT_WININFO);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				vo = new WinInfoVO();
+				vo.setCode(rs.getInt("code"));
+				vo.setDrwNo(rs.getInt("drwNo"));
+				vo.setDrwDate(rs.getDate("drDate"));
+				vo.setTotSellamnt(rs.getLong("totSellamnt"));
+				vo.setFirstAccumamnt(rs.getLong("firstWinamnt"));
+				list.add(vo);
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 		return list;
 	}
 	
@@ -147,6 +217,27 @@ public class JdbcConnection {
 			
 		}
 		return 1;
+	}
+	
+	public void makeNumber(int num0, int num1, int num2, int num3, int num4, int num5) {
+		String INSERT_MAKENUMBER = "insert into makenumber_test(num1, num2, num3, num4, num5, num6) values(?, ?, ?, ?, ?, ?)";
+		
+		try {
+			join();
+			pstmt = conn.prepareStatement(INSERT_MAKENUMBER);
+			pstmt.setInt(1, num0);
+			pstmt.setInt(2, num1);
+			pstmt.setInt(3, num2);
+			pstmt.setInt(4, num3);
+			pstmt.setInt(5, num4);
+			pstmt.setInt(6, num5);
+			
+			pstmt.executeUpdate();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("makeNumber!!!!!");
 	}
 	
 	public int lotto_win_info_insert(int drwNo, Date drwNoDate, long totSellamnt, long firstAccumamnt) {
@@ -177,7 +268,7 @@ public class JdbcConnection {
 	}
 	public void join() {
 		try {
-			String dbURL = "jdbc:mysql://localhost:3306/Lotto?serverTimezone=Asia/Seoul&useSSL=false";
+			String dbURL = "jdbc:mysql://localhost:3306/Lotto?serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false";
 			String dbID = "root";
 			String dbPassword = "qwer1321";
 			Class.forName("com.mysql.cj.jdbc.Driver");
