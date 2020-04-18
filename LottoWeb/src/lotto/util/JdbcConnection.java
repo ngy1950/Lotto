@@ -25,6 +25,7 @@ public class JdbcConnection {
 		String SQL = "INSERT INTO lotto_count_test(lotto_win, bonus) VALUES(?, ?)";						// 1회차 ~ 당첨 번호 횟수 
 		String UPDATE_WIN = "update lotto_count_test set lotto_win = lotto_win + 1 where lotto_num = ?";	// 당첨 번호 횟수 증가
 		String UPDATE_BONUS = "update lotto_count_test set bonus = bonus + 1 where lotto_num = ?";			// 당첨 보너스 보너스 번호 횟수 증가
+		return 1;
 /*
 		//		로또번호 최초 INSERT시 
 		try {
@@ -50,6 +51,7 @@ public class JdbcConnection {
 		return 1;
 */
 
+		/*
 //		로또 당첨 번호 update 
 		try {
 			join();
@@ -70,6 +72,8 @@ public class JdbcConnection {
 		}
 		close();
 		return 1;
+		
+*/
 	}
 	
 	public ArrayList<SaleVO> sale_Select(){
