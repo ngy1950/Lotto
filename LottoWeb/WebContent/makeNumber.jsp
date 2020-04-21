@@ -294,7 +294,7 @@ strong {
 							<br>	
 							<center>
 								<div class="d-inline-block small mr-1">
-									<h2>생성 된 번호</h2>
+									<h2>추첨 번호</h2>
 								</div>
 							</center>
 							<hr>

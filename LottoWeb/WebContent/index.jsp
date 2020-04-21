@@ -7,25 +7,20 @@
     pageEncoding="EUC-KR"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="lotto.util.JdbcConnection"%>
-<%@page import="lotto.count.countVO" %>
+<%@page import="lotto.count.CountMstVO" %>
 <jsp:useBean id="jdbcConnection" class="lotto.util.JdbcConnection" scope="page" />
-<jsp:useBean id="countVO" class="lotto.count.countVO" />
+<jsp:useBean id="countVO" class="lotto.count.CountMstVO" />
 <%
 	
-	ArrayList<countVO> list = jdbcConnection.lotto_Select();
+	ArrayList<CountMstVO> list = jdbcConnection.lotto_Select();
 	SimpleDateFormat SDate = new SimpleDateFormat("yyyy.mm.dd hh:mm:ss", Locale.KOREA);
 	Date current = new Date();
 	String CurDate = SDate.format(current);
 	CurDate = CurDate.substring(0,4);
 	
-	ArrayList<makeNumberVO> make_list = jdbcConnection.lotto_Select_makeNumber();
-	
 	int nowPageNo = Integer.parseInt(request.getParameter("pageNo"));
-	if (nowPageNo < 1) {
-		nowPageNo = 1;
-	} else if (nowPageNo > (make_list.get(0).getGetRow() / 10) + 1) {
-		nowPageNo = (make_list.get(0).getGetRow() / 10) + 1;
-	}
+	ArrayList<makeNumberVO> make_list = jdbcConnection.lotto_Select_makeNumber(nowPageNo);
+	
 %>
 <html>
 <head>
@@ -93,11 +88,16 @@
 						<hr>
 						<div class="row">
 									<%
-					for (int i = (nowPageNo - 1) * 10; i <= (nowPageNo * 10) - 1; i++) {
+					for (int i = 0; i <= list.size(); i++) {
 						if (i < make_list.size()) {
-							System.out.println("make_list.size(): " + make_list.size());
-							System.out.println("i: " + i);
-							System.out.println("nowPageNo: " + nowPageNo);
+							System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!\n"+make_list.size());
+							int [] arr = new int[6];
+							arr[0] = make_list.get(i).getNum1();
+							arr[1] = make_list.get(i).getNum2();
+							arr[2] = make_list.get(i).getNum3();
+							arr[3] = make_list.get(i).getNum4();
+							arr[4] = make_list.get(i).getNum5();
+							arr[5] = make_list.get(i).getNum6();
 				%>
 						
 							<div class="col-lg-6 col-md-12">
@@ -107,33 +107,30 @@
 											<strong>878회</strong>
 										</div>
 									<%
-									for(int j=1;j<=6;j++){
-										Object st2 = "make_list.get(i).getNum"+ j + "()";
-										String st = "make_list.get(i).getNum"+ j + "()";
-										int num = make_list.get(i).getNum1();
-										//int num = st;
+									for(int j=0;j<6;j++){
+										int num = arr[j];										
 									%>
 										
-			  	<% 
-			  			if(num <=10){
+			  	<% 			  	
+			  			if(arr[j] <=10){
 			  	%>
-							<div class="d-inline-block numberCircle border-warning bg-warning text-light"><strong><%=num%></strong></div>
+							<div class="d-inline-block numberCircle border-warning bg-warning text-light"><strong style="color: white;"><%=arr[j]%></strong></div>
 				<%
-						}else if(num >10 && num <= 20){
+						}else if(arr[j] >10 && arr[j] <= 20){
 				%>
-							<div class="d-inline-block numberCircle border-primary bg-primary text-light"><strong><%=num%></strong></div>
+							<div class="d-inline-block numberCircle border-primary bg-primary text-light"><strong style="color: white;"><%=arr[j]%></strong></div>
 				<%		
-						}else if(num > 20 && num <= 30){
+						}else if(arr[j] > 20 && arr[j] <= 30){
 				%>
-							<div class="d-inline-block numberCircle border-primary bg-primary text-light"><strong><%=num%></strong></div>										
+							<div class="d-inline-block numberCircle border-danger bg-danger text-style"><strong style="color: white;"><%=arr[j]%></strong></div>										
 				<%		
-						}else if(num > 30 && num <= 40){
+						}else if(arr[j] > 30 && arr[j] <= 40){
 				%>
-							<div class="d-inline-block numberCircle border-primary bg-primary text-light"><strong><%=num%></strong></div>				
+							<div class="d-inline-block numberCircle border-secondary bg-secondary text-style"><strong style="color: white;"><%=arr[j]%></strong></div>				
 				<%
 						}else{
 				%>
-							<div class="d-inline-block numberCircle border-primary bg-primary text-light"><strong><%=num%></strong></div>				
+							<div class="d-inline-block numberCircle border-primary bg-primary text-light"><strong style="color: white;"><%=arr[j]%></strong></div>				
 				<%
 					}}
 			  	%>			
@@ -149,274 +146,35 @@
 								</div>
 							</div>
 				<%}} %>	
-							<div class="col-lg-6 col-md-12">
-								<div class="card text-center mt-2 mb-2">
-									<div class="card-body mx-auto clearfix px-0 py-2">
-										<div class="d-inline-block small mr-1">
-											<strong>878회</strong>
-										</div>
-										<div class="d-inline-block numberCircle border-warning bg-warning text-light"><strong>5</strong></div>
-										<div class="d-inline-block numberCircle border-warning bg-warning text-light"><strong>7</strong></div>
-										<div class="d-inline-block numberCircle border-primary bg-primary text-light"><strong>9</strong></div>
-										<div class="d-inline-block numberCircle border-danger bg-danger text-light"><strong>12</strong></div>
-										<div class="d-inline-block numberCircle border-secondary bg-secondary text-light"><strong>15</strong></div>
-										<div class="d-inline-block numberCircle border-primary bg-primary text-light"><strong>23</strong></div>
-										<div class="col-md-12" style="font-size: 1.1em">
-											<div class="small text-muted mt-1" >
-												guest: 
-												<div class="glyphicon glyphicon-time"></div>
-											 	2020.02.11 15:01:17
-											</div>
-											
-										</div>												
-									</div>
-								</div>
-							</div>
+					
+							<div class="col-lg-12 col-md-12">
 							
-							<div class="col-lg-6 col-md-12">
-								<div class="card text-center mt-2 mb-2">
-									<div class="card-body mx-auto clearfix px-0 py-2">
-										<div class="d-inline-block small mr-1">
-											<strong>878회</strong>
-										</div>
-										<div class="d-inline-block numberCircle border-warning bg-warning text-light"><strong>5</strong></div>
-										<div class="d-inline-block numberCircle border-warning bg-warning text-light"><strong>7</strong></div>
-										<div class="d-inline-block numberCircle border-primary bg-primary text-light"><strong>9</strong></div>
-										<div class="d-inline-block numberCircle border-danger bg-danger text-light"><strong>12</strong></div>
-										<div class="d-inline-block numberCircle border-secondary bg-secondary text-light"><strong>15</strong></div>
-										<div class="d-inline-block numberCircle border-primary bg-primary text-light"><strong>23</strong></div>
-										<div class="col-md-12" style="font-size: 1.1em">
-											<div class="small text-muted mt-1" >
-												guest: 
-												<div class="glyphicon glyphicon-time"></div>
-											 	2020.02.11 15:01:17
-											</div>
-											
-										</div>												
-									</div>
+								<center>
+								<%if(nowPageNo>1){ %>
+									<a class="btn caegory-btn" href="./index.jsp?pageNo=<%=nowPageNo-1%>">
+										<div class="glyphicon glyphicon-chevron-left"></div>
+									</a>&nbsp;&nbsp;&nbsp;
+								<%}else{%>
+									<a class="btn caegory-btn" href="./index.jsp?pageNo=<%=nowPageNo%>">
+										<div class="glyphicon glyphicon-chevron-left"></div>
+									</a>&nbsp;&nbsp;&nbsp;	
+								<%} %>
+									<strong style="font-size: 1.0em"><%=nowPageNo%></strong>&nbsp;&nbsp;&nbsp; 
+									<a class="btn caegory-btn" href="./index.jsp?pageNo=<%=nowPageNo+1%>">
+										<div class="glyphicon glyphicon-chevron-right"></div>
+									</a>
+								</center>
+								<div class="col-lg-12 col-md-12">
+								<br>
+									<center>
+										<a class="btn caegory-btn" href="#" style="background-color: blue; width: 100%;">
+										<span style="color: white;">로또번호 생성하기</span>
+										</a>
+									</center>
 								</div>
-							</div>
-							
-							<div class="col-lg-6 col-md-12">
-								<div class="card text-center mt-2 mb-2">
-									<div class="card-body mx-auto clearfix px-0 py-2">
-										<div class="d-inline-block small mr-1">
-											<strong>878회</strong>
-										</div>
-										<div class="d-inline-block numberCircle border-warning bg-warning text-light"><strong>5</strong></div>
-										<div class="d-inline-block numberCircle border-warning bg-warning text-light"><strong>7</strong></div>
-										<div class="d-inline-block numberCircle border-primary bg-primary text-light"><strong>9</strong></div>
-										<div class="d-inline-block numberCircle border-danger bg-danger text-light"><strong>12</strong></div>
-										<div class="d-inline-block numberCircle border-secondary bg-secondary text-light"><strong>15</strong></div>
-										<div class="d-inline-block numberCircle border-primary bg-primary text-light"><strong>23</strong></div>	
-										<div class="col-md-12" style="font-size: 1.1em">
-											<div class="small text-muted mt-1" >
-												guest: 
-												<div class="glyphicon glyphicon-time"></div>
-											 	2020.02.11 15:01:17
-											</div>
-											
-										</div>											
-									</div>
-								</div>
-							</div>
-							
-							<div class="col-lg-6 col-md-12">
-								<div class="card text-center mt-2 mb-2">
-									<div class="card-body mx-auto clearfix px-0 py-2">
-										<div class="d-inline-block small mr-1">
-											<strong>878회</strong>
-										</div>
-										<div class="d-inline-block numberCircle border-warning bg-warning text-light"><strong>5</strong></div>
-										<div class="d-inline-block numberCircle border-warning bg-warning text-light"><strong>7</strong></div>
-										<div class="d-inline-block numberCircle border-primary bg-primary text-light"><strong>9</strong></div>
-										<div class="d-inline-block numberCircle border-danger bg-danger text-light"><strong>12</strong></div>
-										<div class="d-inline-block numberCircle border-secondary bg-secondary text-light"><strong>15</strong></div>
-										<div class="d-inline-block numberCircle border-primary bg-primary text-light"><strong>23</strong></div>	
-										<div class="col-md-12" style="font-size: 1.1em">
-											<div class="small text-muted mt-1" >
-												guest: 
-												<div class="glyphicon glyphicon-time"></div>
-											 	2020.02.11 15:01:17
-											</div>
-											
-										</div>											
-									</div>
-								</div>
-							</div>
-							
-							<div class="col-lg-6 col-md-12">
-								<div class="card text-center mt-2 mb-2">
-									<div class="card-body mx-auto clearfix px-0 py-2">
-										<div class="d-inline-block small mr-1">
-											<strong>878회</strong>
-										</div>
-										<div class="d-inline-block numberCircle border-warning bg-warning text-light"><strong>5</strong></div>
-										<div class="d-inline-block numberCircle border-warning bg-warning text-light"><strong>7</strong></div>
-										<div class="d-inline-block numberCircle border-primary bg-primary text-light"><strong>9</strong></div>
-										<div class="d-inline-block numberCircle border-danger bg-danger text-light"><strong>12</strong></div>
-										<div class="d-inline-block numberCircle border-secondary bg-secondary text-light"><strong>15</strong></div>
-										<div class="d-inline-block numberCircle border-primary bg-primary text-light"><strong>23</strong></div>	
-										<div class="col-md-12" style="font-size: 1.1em">
-											<div class="small text-muted mt-1" >
-												guest: 
-												<div class="glyphicon glyphicon-time"></div>
-											 	2020.02.11 15:01:17
-											</div>
-											
-										</div>											
-									</div>
-								</div>
-							</div>
-							
-							<div class="col-lg-6 col-md-12">
-								<div class="card text-center mt-2 mb-2">
-									<div class="card-body mx-auto clearfix px-0 py-2">
-										<div class="d-inline-block small mr-1">
-											<strong>878회</strong>
-										</div>
-										<div class="d-inline-block numberCircle border-warning bg-warning text-light"><strong>5</strong></div>
-										<div class="d-inline-block numberCircle border-warning bg-warning text-light"><strong>7</strong></div>
-										<div class="d-inline-block numberCircle border-primary bg-primary text-light"><strong>9</strong></div>
-										<div class="d-inline-block numberCircle border-danger bg-danger text-light"><strong>12</strong></div>
-										<div class="d-inline-block numberCircle border-secondary bg-secondary text-light"><strong>15</strong></div>
-										<div class="d-inline-block numberCircle border-primary bg-primary text-light"><strong>23</strong></div>	
-										<div class="col-md-12" style="font-size: 1.1em">
-											<div class="small text-muted mt-1" >
-												guest: 
-												<div class="glyphicon glyphicon-time"></div>
-											 	2020.02.11 15:01:17
-											</div>
-											
-										</div>											
-									</div>
-								</div>
-							</div>
-							
-							<div class="col-lg-6 col-md-12">
-								<div class="card text-center mt-2 mb-2">
-									<div class="card-body mx-auto clearfix px-0 py-2">
-										<div class="d-inline-block small mr-1">
-											<strong>878회</strong>
-										</div>
-										<div class="d-inline-block numberCircle border-warning bg-warning text-light"><strong>5</strong></div>
-										<div class="d-inline-block numberCircle border-warning bg-warning text-light"><strong>7</strong></div>
-										<div class="d-inline-block numberCircle border-primary bg-primary text-light"><strong>9</strong></div>
-										<div class="d-inline-block numberCircle border-danger bg-danger text-light"><strong>12</strong></div>
-										<div class="d-inline-block numberCircle border-secondary bg-secondary text-light"><strong>15</strong></div>
-										<div class="d-inline-block numberCircle border-primary bg-primary text-light"><strong>23</strong></div>	
-										<div class="col-md-12" style="font-size: 1.1em">
-											<div class="small text-muted mt-1" >
-												guest: 
-												<div class="glyphicon glyphicon-time"></div>
-											 	2020.02.11 15:01:17
-											</div>
-											
-										</div>										
-									</div>
-								</div>
-							</div>
-							
-							<div class="col-lg-6 col-md-12">
-								<div class="card text-center mt-2 mb-2">
-									<div class="card-body mx-auto clearfix px-0 py-2">
-										<div class="d-inline-block small mr-1">
-											<strong>878회</strong>
-										</div>
-										<div class="d-inline-block numberCircle border-warning bg-warning text-light"><strong>5</strong></div>
-										<div class="d-inline-block numberCircle border-warning bg-warning text-light"><strong>7</strong></div>
-										<div class="d-inline-block numberCircle border-primary bg-primary text-light"><strong>9</strong></div>
-										<div class="d-inline-block numberCircle border-danger bg-danger text-light"><strong>12</strong></div>
-										<div class="d-inline-block numberCircle border-secondary bg-secondary text-light"><strong>15</strong></div>
-										<div class="d-inline-block numberCircle border-primary bg-primary text-light"><strong>23</strong></div>	
-										<div class="col-md-12" style="font-size: 1.1em">
-											<div class="small text-muted mt-1" >
-												guest: 
-												<div class="glyphicon glyphicon-time"></div>
-											 	2020.02.11 15:01:17
-											</div>
-											
-										</div>											
-									</div>
-								</div>
-							</div>
-							
-							<div class="col-lg-6 col-md-12">
-								<div class="card text-center mt-2 mb-2">
-									<div class="card-body mx-auto clearfix px-0 py-2">
-										<div class="d-inline-block small mr-1">
-											<strong>878회</strong>
-										</div>
-										<div class="d-inline-block numberCircle border-warning bg-warning text-light"><strong>5</strong></div>
-										<div class="d-inline-block numberCircle border-warning bg-warning text-light"><strong>7</strong></div>
-										<div class="d-inline-block numberCircle border-primary bg-primary text-light"><strong>9</strong></div>
-										<div class="d-inline-block numberCircle border-danger bg-danger text-light"><strong>12</strong></div>
-										<div class="d-inline-block numberCircle border-secondary bg-secondary text-light"><strong>15</strong></div>
-										<div class="d-inline-block numberCircle border-primary bg-primary text-light"><strong>23</strong></div>	
-										<div class="col-md-12" style="font-size: 1.1em">
-											<div class="small text-muted mt-1" >
-												guest: 
-												<div class="glyphicon glyphicon-time"></div>
-											 	2020.02.11 15:01:17
-											</div>
-											
-										</div>											
-									</div>
-								</div>
-							</div>
-							
-							<div class="col-lg-6 col-md-12">
-								<div class="card text-center mt-2 mb-2">
-									<div class="card-body mx-auto clearfix px-0 py-2">
-										<div class="d-inline-block small mr-1">
-											<strong>878회</strong>
-										</div>
-										<div class="d-inline-block numberCircle border-warning bg-warning text-light"><strong>5</strong></div>
-										<div class="d-inline-block numberCircle border-warning bg-warning text-light"><strong>7</strong></div>
-										<div class="d-inline-block numberCircle border-primary bg-primary text-light"><strong>9</strong></div>
-										<div class="d-inline-block numberCircle border-danger bg-danger text-light"><strong>12</strong></div>
-										<div class="d-inline-block numberCircle border-secondary bg-secondary text-light"><strong>15</strong></div>
-										<div class="d-inline-block numberCircle border-primary bg-primary text-light"><strong>23</strong></div>
-										<div class="col-md-12" style="font-size: 1.1em">
-											<div class="small text-muted mt-1" >
-												guest: 
-												<div class="glyphicon glyphicon-time"></div>
-											 	2020.02.11 15:01:17
-											</div>
-											
-										</div>												
-									</div>
-								</div>
-							</div>
-							
-							<div class="col-lg-6 col-md-12">
-								<div class="card text-center mt-2 mb-2">
-									<div class="card-body mx-auto clearfix px-0 py-2">
-										<div class="d-inline-block small mr-1">
-											<strong>878회</strong>
-										</div>
-										<div class="d-inline-block numberCircle border-warning bg-warning text-light"><strong>5</strong></div>
-										<div class="d-inline-block numberCircle border-warning bg-warning text-light"><strong>7</strong></div>
-										<div class="d-inline-block numberCircle border-primary bg-primary text-light"><strong>9</strong></div>
-										<div class="d-inline-block numberCircle border-danger bg-danger text-light"><strong>12</strong></div>
-										<div class="d-inline-block numberCircle border-secondary bg-secondary text-light"><strong>15</strong></div>
-										<div class="d-inline-block numberCircle border-primary bg-primary text-light"><strong>23</strong></div>	
-										<div class="col-md-12" style="font-size: 1.1em">
-											<div class="small text-muted mt-1" >
-												guest: 
-												<div class="glyphicon glyphicon-time"></div>
-											 	2020.02.11 15:01:17
-											</div>
-											
-										</div>											
-									</div>
-								</div>
-							</div>					
-							<div class="col-lg-12 col-md-12 ">
-							
-								<center><a class="btn caegory-btn" href="#"><b>생성내역 보기</b></a></center>
 							</div>							
 					</div>
+					<br><br>
 					<h4 class="h1-sub mt-3"><strong>로또생성기 당첨내역</strong></h4>
 					<hr>
 					
@@ -708,32 +466,12 @@
 										</div>											
 									</div>
 								</div>
-							</div>					
-							<div class="col-lg-12 col-md-12">
-							
-								<center>
-									<a class="btn caegory-btn" href="#">
-										<div class="glyphicon glyphicon-chevron-left"></div>
-									</a>&nbsp;&nbsp;&nbsp;
-									<strong style="font-size: 1.0em">1 / 10</strong>&nbsp;&nbsp;&nbsp; 
-									<a class="btn caegory-btn" href="#">
-										<div class="glyphicon glyphicon-chevron-right"></div>
-									</a>
-								</center>
-								<div class="col-lg-12 col-md-12">
-								<br>
-									<center>
-										<a class="btn caegory-btn" href="#" style="background-color: blue; width: 100%;">
-										<span style="color: white;">로또번호 생성하기</span>
-										</a>
-									</center>
-								</div>
-							</div>							
-					</div>
+							</div>	
 				</div>
 				</div>
 			</div>
 		</div>
+		
 	</section>
 
 <script>

@@ -2,11 +2,11 @@
     pageEncoding="EUC-KR"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="lotto.util.JdbcConnection"%>
-<%@page import="lotto.count.countVO" %>
+<%@page import="lotto.count.CountMstVO" %>
 <jsp:useBean id="jdbcConnection" class="lotto.util.JdbcConnection" scope="page" />
-<jsp:useBean id="countVO" class="lotto.count.countVO" />
+<jsp:useBean id="countVO" class="lotto.count.CountMstVO" />
 <%
-	ArrayList<countVO> list = jdbcConnection.lotto_Select();
+	ArrayList<CountMstVO> list = jdbcConnection.lotto_Select();
 	int CurDate = Integer.parseInt(request.getParameter("CurDate"));
 	if(CurDate >= 2020){
 		CurDate = 2020;

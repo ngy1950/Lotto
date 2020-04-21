@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import lotto.count.countVO;
+import lotto.count.CountMstVO;
 import lotto.makeNumber.makeNumberVO;
 import lotto.sale.SaleVO;
 import lotto.winInfo.WinInfoVO;
@@ -21,12 +21,11 @@ public class JdbcConnection {
 	
 	public JdbcConnection() {}
 	
-	public int lotto_Insert(int [] winNum, int bonusNum) {
-		String SQL = "INSERT INTO lotto_count_test(lotto_win, bonus) VALUES(?, ?)";						// 1회차 ~ 당첨 번호 횟수 
-		String UPDATE_WIN = "update lotto_count_test set lotto_win = lotto_win + 1 where lotto_num = ?";	// 당첨 번호 횟수 증가
-		String UPDATE_BONUS = "update lotto_count_test set bonus = bonus + 1 where lotto_num = ?";			// 당첨 보너스 보너스 번호 횟수 증가
-		return 1;
-/*
+	public int lotto_Insert(int [] winNum, int[] bonus) {
+		String SQL = "INSERT INTO lotto_count_test(lotto_win, bonus) VALUES(?, ?)";						// 1회차 ~ 당첨 번호 횟수
+		//String LOTTO_MST_INSERT = "INSERT INTO LOTTO_MST(num1, num2, num3, num4, num5, num6, lotto_no, lotto_date, firstWinamnt, firstPrzwnerCo, firstAccumamnt, totSellamnt ) VALUES()";
+		//return 1;
+
 		//		로또번호 최초 INSERT시 
 		try {
 			join();
@@ -35,23 +34,26 @@ public class JdbcConnection {
 			e1.printStackTrace();
 		}
 		for(int i=0;i<winNum.length;i++) {
-			System.out.println(i +": "+ winNum[i] + "번 "+ "-----("+bonusNum[i]+")");
+			System.out.println(i +": "+ winNum[i] + "번 "+ "-----("+bonus[i]+")");
 			
 			try {
 				
 				pstmt.setInt(1, winNum[i]);
-				pstmt.setInt(2, bonusNum[i]);
+				pstmt.setInt(2, bonus[i]);
 				pstmt.executeUpdate();
 			}catch (Exception e) {
 				e.printStackTrace();
 				return -1;
 			}
 		}
-		close();
 		return 1;
-*/
 
-		/*
+
+	}
+	public int lotto_update(int [] winNum, int bonusNum){
+		String UPDATE_WIN = "update lotto_count_test set lotto_win = lotto_win + 1 where lotto_num = ?";	// 당첨 번호 횟수 증가
+		String UPDATE_BONUS = "update lotto_count_test set bonus = bonus + 1 where lotto_num = ?";			// 당첨 보너스 보너스 번호 횟수 증가
+
 //		로또 당첨 번호 update 
 		try {
 			join();
@@ -73,7 +75,8 @@ public class JdbcConnection {
 		close();
 		return 1;
 		
-*/
+
+		
 	}
 	
 	public ArrayList<SaleVO> sale_Select(){
@@ -115,9 +118,9 @@ public class JdbcConnection {
 		return list;
 	}
 	
-	public ArrayList<countVO> lotto_Select() {
-		countVO vo;
-		ArrayList<countVO> list = new ArrayList();
+	public ArrayList<CountMstVO> lotto_Select() {
+		CountMstVO vo;
+		ArrayList<CountMstVO> list = new ArrayList();
 		//int [] lotto_win = new int[45];
 		//int [] bonus = new int[45];
 		//int [] number = new int[45];
@@ -131,7 +134,7 @@ public class JdbcConnection {
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
-				vo = new countVO();
+				vo = new CountMstVO();
 				vo.setLottoNum(rs.getInt("lotto_num"));
 				vo.setLottoWin(rs.getInt("lotto_win"));
 				vo.setBouns(rs.getInt("bonus"));;
@@ -142,15 +145,16 @@ public class JdbcConnection {
 			
 		}
 		System.out.println("!!!" + list);
+		
 		return list;
 	}
 	
-	public ArrayList<makeNumberVO> lotto_Select_makeNumber(){
+	public ArrayList<makeNumberVO> lotto_Select_makeNumber(int pageNo){
 		makeNumberVO vo;
 		ArrayList<makeNumberVO> list = new ArrayList();
 		String SELECT = "select count(*) from makenumber_test";
-		String SELECT_MAKENUMBER = "select * from makenumber_test order by 8 desc";
-		System.out.println("");
+		String SELECT_MAKENUMBER = "select * from makenumber_test order by 8 desc LIMIT " + (pageNo - 1) * 20 + ", 20";
+		System.out.println("@@@@@@@@@@@@22\n" + SELECT_MAKENUMBER);
 		try {
 			join();
 			pstmt = conn.prepareStatement(SELECT);
