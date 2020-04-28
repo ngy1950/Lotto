@@ -187,10 +187,10 @@ strong {
 					<%
 						if (i >= 1 && i < 11) {
 					%>
-					<input type="checkbox" name="ball<%=i%>" value="<%=i%>" /><%=i%>
+					<input type="checkbox" name="ball<%=i%>" value="<%=i%>" />
 					<div
 						class="d-inline-block numberCircle border-warning bg-warning text-style"
-						style="margin: 0px 10px 0px 12px;">
+						style="margin: 0px 10px 0px 6px;">
 						<strong><%=i%></strong>
 					</div>
 					<%
@@ -208,10 +208,10 @@ strong {
 					<%
 						if (j >= 11 && j < 21) {
 					%>
-					<input type="checkbox" name="check" value="check" /><%=j%>
+					<input type="checkbox" name="check" value="check" />
 					<div
 						class="d-inline-block numberCircle border-primary bg-primary text-style"
-						style="margin: 0px 7px 0px 7px;">
+						style="margin: 0px 10px 0px 6px">
 						<strong><%=j%></strong>
 					</div>
 					<%
@@ -229,10 +229,10 @@ strong {
 					<%
 						if (k >= 21 && k < 31) {
 					%>
-					<input type="checkbox" name="check" value="check" /><%=k%>
+					<input type="checkbox" name="check" value="check" />
 					<div
 						class="d-inline-block numberCircle border-danger bg-danger text-style"
-						style="margin: 0px 7px 0px 7px;">
+						style="margin: 0px 10px 0px 6px;">
 						<strong><%=k%></strong>
 					</div>
 					<%
@@ -249,10 +249,10 @@ strong {
 					<%
 						if (l >= 31 && l < 41) {
 					%>
-					<input type="checkbox" name="check" value="check" /><%=l%>
+					<input type="checkbox" name="check" value="check" />
 					<div
 						class="d-inline-block numberCircle border-secondary bg-secondary text-style"
-						style="margin: 0px 7px 0px 7px;">
+						style="margin: 0px 10px 0px 6px;">
 						<strong><%=l%></strong>
 					</div>
 					<%
@@ -269,9 +269,9 @@ strong {
 					<%
 						if (m >= 41) {
 					%>
-					<input type="checkbox" name="check" value="check" /><%=m%>
+					<input type="checkbox" name="check" value="check" />
 					<div class="d-inline-block numberCircle text-style"
-						style="background: #29b72c; border-color: #29b72c; margin: 0px 7px 0px 7px;">
+						style="background: #29b72c; border-color: #29b72c; margin: 0px 10px 0px 6px;">
 						<strong><%=m%></strong>
 					</div>
 					<%

@@ -18,7 +18,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
 
@@ -35,6 +38,7 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
 <title>Insert title here</title>
+
 </head>
 <body>
 
@@ -99,7 +103,7 @@
 						<canvas id="canvas"></canvas>
 						<br>
 						<!-- <center><a class="btn caegory-btn" href="#"><b>분석보기</b></a></center> --> 
-					
+						<!-- 
 						<h4 class="h1-sub mt-3"><strong>연도별</strong>
 						<hr>
 							<center>
@@ -113,11 +117,14 @@
 								</a>
 							</center>
 							<right>
-								
-							</right>
-						
+								</right>
 						</h4>
-						
+						 -->
+						 <h4 class="h1-sub mt-3"><strong>기간조회</strong></h4>
+						<hr>
+							<center>
+								 <input type="text" id="datepicker1" placeholder="2020-01-01"><div class="glyphicon glyphicon-calendar" style="margin-left: 3px; font-size: 25px;"></div> &nbsp;~&nbsp; <input type="text" id="datepicker2" placeholder="2020-01-01"><div class="glyphicon glyphicon-calendar" style="margin-left: 3px; font-size: 25px;"></div> 
+							</center>
 						<canvas id="canvas_year"></canvas>
 						<br>
 						
@@ -135,11 +142,20 @@
 				</div>
 			</div>
 		</div>
-	</section>
-	
+	</section>	
 	
 <script>
-
+$(function(){
+    $( "#datepicker1").datepicker();
+    	var dateType = $('#datepicker1').datepicker('getDate');
+    	$.datepicker1.formatDate('yy-mm-dd', dateType);
+  });
+$(function(){
+    $( "#datepicker2").datepicker();
+    	var dateType = $('#datepicker1').datepicker('getDate');
+    	
+  });
+  
 var ctx = document.getElementById('canvas').getContext('2d');
 var chart = new Chart(ctx, {
     // The type of chart we want to create
@@ -209,9 +225,6 @@ var chart = new Chart(ctx, {
             }]
         }}
 });
-
-
-
 new Chart(document.getElementById("canvas_year"), {
     type: 'horizontalBar',
     data: {
