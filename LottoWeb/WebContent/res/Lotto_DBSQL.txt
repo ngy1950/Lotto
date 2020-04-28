@@ -1,0 +1,55 @@
+/* 
+	프로젝트명: 로또생성기
+	DB: mysql 
+	
+*/
+
+create table lotto_count_test(
+lotto_num int auto_increment primary key,
+lotto_win int,
+bonus int);
+
+
+create table makeNumber_test(
+code int primary key auto_increment,
+num1 int not null,
+num2 int not null,
+num3 int not null,
+num4 int not null,
+num5 int not null,
+num6 int not null,
+date datetime default now());
+
+
+create table lotto_sale_test(
+code int primary key auto_increment,
+name varchar(40) not null,
+type varchar(10) not null,
+location varchar(80) not null,
+win_turn int not null,
+win_date date not null
+);
+
+
+create table win_test(
+code int primary key auto_increment,
+num1 int not null,
+num2 int not null,
+num3 int not null,
+num4 int not null,
+num5 int not null,
+num6 int not null,
+date datetime not null,
+win_turn int not null);
+
+
+
+create table win_info_test(
+code int primary key auto_increment,
+drwNo int,
+drDate date,
+totSellamnt bigint,
+firstWinamnt bigint);
+
+
+
